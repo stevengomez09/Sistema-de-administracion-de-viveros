@@ -1,7 +1,7 @@
 import json
 from django.http import JsonResponse
 from django.shortcuts import render,HttpResponse
-from productor.models import Productor,Finca,Vivero,Tipocultivo, ProductoControl, ControlPlaga, ControlFertilizantes
+from productor.models import Productor,Finca,Vivero,Tipocultivo, ProductoControl, ControlPlaga, ControlFertilizantes, ControlHongo
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
@@ -129,15 +129,13 @@ def crearControlHongo(datatemp):
             excepciones.append("Campo productocontrol es obligatorio")
         if excepciones.count > 0:
             raise Exception(", ".join(excepciones))
-        viveroparacrear =   Vivero(
-            codigo = datatemp.get("codigo"),
-            tipocultivoid = Tipocultivo.objects.get(tipocultivoid=datatemp.get("tipocultivoid"))
+        controlhongoparacrear =   ControlHongo(
+            controlhongoid = datatemp.get("controlhongoid"),
+            diasPeriodoCarencia = datatemp.get("diasPeriodoCarencia"),
+            nombre = datatemp.get("nombre"),
+            productocontrol = ProductoControl.objects.get(productocontrolid=datatemp.get("productocontrolid"))
         )
-        viveroparacrear.save()
+        controlhongoparacrear.save()
         return True
     
-
-def crearLabor(datatemp):
-     excepciones = []
-     jhasdhs = ""
 
