@@ -1,7 +1,7 @@
 import json
 from django.http import JsonResponse
 from django.shortcuts import render,HttpResponse
-from productor.models import Productor,Finca,Vivero,Tipocultivo
+from productor.models import Productor,Finca,Vivero,Tipocultivo,Labor
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
@@ -118,5 +118,19 @@ def crearVivero(datatemp):
         return True
 
 def crearLabor(datatemp):
-     excepciones = []
-     jhasdhs = ""
+    excepciones = []
+    if datatemp.get("fecha") == "":
+        excepciones.append("Campo fecha es obligatorio")
+    if datatemp.get("descripcion") == "":
+        excepciones.append("Campo descripcion es obligatorio")
+    if datatemp.get("viveroid") == "":
+        excepciones.append("Campo viveroid es obligatorio")
+    if excepciones.count > 0:
+            raise Exception(", ".join(excepciones))
+    laborparacrear = Labor(
+        fecha = datatemp.get("fecha"),
+        descripcion = datatemp.get("descripcion"),
+        viveroid = Vivero.objects.get(viveroid=datatemp.get("viveroid"))
+    )
+    laborparacrear.save()
+    return True
