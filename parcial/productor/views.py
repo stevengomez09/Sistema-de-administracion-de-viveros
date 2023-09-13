@@ -116,4 +116,7 @@ def crearVivero(datatemp):
         )
         viveroparacrear.save()
         return True
-    
+
+def crearLabor(datatemp):
+     excepciones = []
+     jhasdhs = ""
