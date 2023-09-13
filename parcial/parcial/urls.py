@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('productortemp',views.crearproductor,name="crearproductores"),
     path('productortemp/',views.crearproductor,name="crearproductores"),
+    path('finca/',views.crearFinca,name="modulofincas"),
     path('productortemp/<int:idproductor>',views.crearproductor,name="crearproductores"),
 ]

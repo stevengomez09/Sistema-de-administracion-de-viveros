@@ -1,7 +1,7 @@
 import json
 from django.http import JsonResponse
 from django.shortcuts import render,HttpResponse
-from productor.models import Productor
+from productor.models import Productor,Finca
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
@@ -78,3 +78,25 @@ def crearproductor(request,idproductor=''):
     else:   
         return JsonResponse({'error': 'Method = POST,GET,PATCH'}, status=400)
     
+
+def crearFinca(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8')) 
+        fincatemp = Finca(
+            numeroCastro = data.get("numeroCastro"),
+            municipio = data.get("municipio"),
+            productor = Productor.objects.get(productorid=data.get("productorid"))
+        )
+        fincatemp.save()
+        idregistro = fincatemp.fincaid
+        msg = {
+            "mesaje":{
+                "data":{
+                    "finca":idregistro
+                }
+            },
+            "error":""
+        }
+        return JsonResponse({'mesaje':msg}, status=200)
+    else:
+        return JsonResponse({'mesaje':"GET"}, status=400)
