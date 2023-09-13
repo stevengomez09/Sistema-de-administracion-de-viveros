@@ -118,6 +118,7 @@ def crearVivero(datatemp):
         return True
 
 
+
 def crearControlHongo(datatemp): 
         excepciones = []
         if datatemp.get("diasPeriodoCarencia") == "":
@@ -135,3 +136,8 @@ def crearControlHongo(datatemp):
         viveroparacrear.save()
         return True
     
+
+def crearLabor(datatemp):
+     excepciones = []
+     jhasdhs = ""
+
