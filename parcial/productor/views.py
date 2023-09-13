@@ -1,7 +1,7 @@
 import json
 from django.http import JsonResponse
 from django.shortcuts import render,HttpResponse
-from productor.models import Productor,Finca
+from productor.models import Productor,Finca,Vivero,Tipocultivo
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
@@ -100,3 +100,20 @@ def crearFinca(request):
         return JsonResponse({'mesaje':msg}, status=200)
     else:
         return JsonResponse({'mesaje':"GET"}, status=400)
+
+
+def crearVivero(datatemp): 
+        excepciones = []
+        if datatemp.get("codigo") == "":
+            excepciones.append("Campo codigo es obligatorio")
+        if datatemp.get("tipocultivoid") == "":
+            excepciones.append("Campo tipocultivoid es obligatorio")
+        if excepciones.count > 0:
+            raise Exception(", ".join(excepciones))
+        viveroparacrear =   Vivero(
+            codigo = datatemp.get("codigo"),
+            tipocultivoid = Tipocultivo.objects.get(tipocultivoid=datatemp.get("tipocultivoid"))
+        )
+        viveroparacrear.save()
+        return True
+    
