@@ -6,7 +6,32 @@ from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 @csrf_exempt
-def crearproductor(request,idproductor=''):
+
+def crearproductor(data):  
+    excepciones = []
+    if data.get("cedula") == "":
+        excepciones.append("Campo cedula es obligatorio")
+    if data.get("nombre") == "":
+        excepciones.append("Campo nombre es obligatorio")
+    if data.get("apellido") == "":
+        excepciones.append("Campo apellido es obligatorio")
+    if data.get("telefono") == "":
+        excepciones.append("Campo telefono es obligatorio")
+    if data.get("correo") == "":
+        excepciones.append("Campo correo es obligatorio")       
+    if excepciones.count > 0:
+        raise Exception(", ".join(excepciones)) 
+    productortemp = Productor(
+        cedula = data.get('cedula'),
+        nombre = data.get('nombre'),
+        apellido = data.get('apellido'),
+        telefono = data.get('telefono'),
+        correo = data.get('correo')
+    )
+    productortemp.save()
+    return True
+
+def crearproductor2(request,idproductor=''):
 
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8')) 
