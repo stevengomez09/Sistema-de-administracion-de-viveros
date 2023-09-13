@@ -137,9 +137,9 @@ def crearFinca(datatemp):
         if excepciones.count > 0:
             raise Exception(", ".join(excepciones))
         fincatemp = Finca(
-            numeroCastro = data.get("numeroCastro"),
-            municipio = data.get("municipio"),
-            productor = Productor.objects.get(productorid=data.get("productorid"))
+            numeroCastro = datatemp.get("numeroCastro"),
+            municipio = datatemp.get("municipio"),
+            productor = Productor.objects.get(productorid=datatemp.get("productorid"))
         )
         fincatemp.save()
         return True
@@ -192,7 +192,7 @@ def crearControlHongo(datatemp):
         controlhongoid = datatemp.get("controlhongoid"),
         diasPeriodoCarencia = datatemp.get("diasPeriodoCarencia"),
         nombre = datatemp.get("nombre"),
-        productocontrol = ProductoControl.objects.get(productocontrol=datatemp.get("productocontrolid"))
+        productocontrol = ProductoControl.objects.get(productocontrolid=datatemp.get("productocontrolid"))
     )
     controlHongoparacrear.save()
     return True
@@ -209,7 +209,7 @@ def crearControlPlaga(datatemp):
     controlPlagaparacrear = ControlHongo(
         controlplagaid = datatemp.get("controlhongoid"),
         diasPeriodoCarencia = datatemp.get("diasPeriodoCarencia"),
-        productocontrol = ProductoControl.objects.get(productocontrol=datatemp.get("productocontrolid"))
+        productocontrol = ProductoControl.objects.get(productocontrolid=datatemp.get("productocontrolid"))
     )
     controlPlagaparacrear.save()
     return True
@@ -225,7 +225,7 @@ def crearControlFertilizantes(datatemp):
     controlFertilizantesparacrear = ControlHongo(
         controlfertilizantesid = datatemp.get("controlfertilizantesid"),
         fechaUltimaAplicacion = datatemp.get("fechaUltimaAplicacion"),
-        productocontrol = ProductoControl.objects.get(productocontrol=datatemp.get("productocontrolid"))
+        productocontrol = ProductoControl.objects.get(productocontrolid=datatemp.get("productocontrolid"))
     )
     controlFertilizantesparacrear.save()
     return True
@@ -251,7 +251,7 @@ def crearProductoControl(datatemp):
         nombreproducto = datatemp.get("nombreproducto"),
         frecuenciaDias = datatemp.get("frecuenciaDias"),
         valor = datatemp.get("valor"),
-        labor = datatemp.get("labor"),
+        labor = Labor.objects.get(laborid=datatemp.get("laborid"))
     )
     ProductoControparacrear.save()
     return True
