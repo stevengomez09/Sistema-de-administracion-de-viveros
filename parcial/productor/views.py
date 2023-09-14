@@ -79,7 +79,7 @@ def crearproductor(request,idproductor=''):
         return JsonResponse({'error': 'Method = POST,GET,PATCH'}, status=400)
     
 
-def crearFinca(request):
+def crearFinca2(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8')) 
         fincatemp = Finca(
@@ -100,6 +100,24 @@ def crearFinca(request):
         return JsonResponse({'mesaje':msg}, status=200)
     else:
         return JsonResponse({'mesaje':"GET"}, status=400)
+    
+def crearFinca(datatemp): 
+        excepciones = []
+        if datatemp.get("numeroCastro") == "":
+            excepciones.append("Campo numeroCastro es obligatorio")
+        if datatemp.get("municipio") == "":
+            excepciones.append("Campo municipio es obligatorio")
+        if datatemp.get("productorid") == "":
+            excepciones.append("Campo productor es obligatorio")
+        if excepciones.count > 0:
+            raise Exception(", ".join(excepciones))
+        fincatemp = Finca(
+            numeroCastro = data.get("numeroCastro"),
+            municipio = data.get("municipio"),
+            productor = Productor.objects.get(productorid=data.get("productorid"))
+        )
+        fincatemp.save()
+        return True
 
 
 def crearVivero(datatemp): 
@@ -107,7 +125,7 @@ def crearVivero(datatemp):
         if datatemp.get("codigo") == "":
             excepciones.append("Campo codigo es obligatorio")
         if datatemp.get("tipocultivoid") == "":
-            excepciones.append("Campo tipocultivoid es obligatorio")
+            excepciones.append("Campo tipo cultivo es obligatorio")
         if excepciones.count > 0:
             raise Exception(", ".join(excepciones))
         viveroparacrear =   Vivero(
@@ -124,7 +142,7 @@ def crearLabor(datatemp):
     if datatemp.get("descripcion") == "":
         excepciones.append("Campo descripcion es obligatorio")
     if datatemp.get("viveroid") == "":
-        excepciones.append("Campo viveroid es obligatorio")
+        excepciones.append("Campo vivero es obligatorio")
     if excepciones.count > 0:
             raise Exception(", ".join(excepciones))
     laborparacrear = Labor(
@@ -141,7 +159,7 @@ def crearControlHongo(datatemp):
         excepciones.append("Campo Dias Periodo Carencia es obligatorio")
     if datatemp.get("nombre") == "":
         excepciones.append("Campo Nombre es obligatorio")
-    if datatemp.get("productocontrol") == "":
+    if datatemp.get("productocontrolid") == "":
         excepciones.append("Campo Producto control es obligatorio")
     if excepciones.count > 0:
             raise Exception(", ".join(excepciones))
@@ -149,7 +167,7 @@ def crearControlHongo(datatemp):
         controlhongoid = datatemp.get("controlhongoid"),
         diasPeriodoCarencia = datatemp.get("diasPeriodoCarencia"),
         nombre = datatemp.get("nombre"),
-        productocontrol = ProductoControl.objects.get(productocontrol=datatemp.get("productocontrol"))
+        productocontrol = ProductoControl.objects.get(productocontrol=datatemp.get("productocontrolid"))
     )
     controlHongoparacrear.save()
     return True
@@ -159,14 +177,14 @@ def crearControlPlaga(datatemp):
     excepciones = []
     if datatemp.get("diasPeriodoCarencia") == "":
         excepciones.append("Campo Dias Periodo Carencia es obligatorio")
-    if datatemp.get("productocontrol") == "":
+    if datatemp.get("productocontrolid") == "":
         excepciones.append("Campo Producto control es obligatorio")
     if excepciones.count > 0:
             raise Exception(", ".join(excepciones))
     controlPlagaparacrear = ControlHongo(
         controlplagaid = datatemp.get("controlhongoid"),
         diasPeriodoCarencia = datatemp.get("diasPeriodoCarencia"),
-        productocontrol = ProductoControl.objects.get(productocontrol=datatemp.get("productocontrol"))
+        productocontrol = ProductoControl.objects.get(productocontrol=datatemp.get("productocontrolid"))
     )
     controlPlagaparacrear.save()
     return True
@@ -175,14 +193,40 @@ def crearControlFertilizantes(datatemp):
     excepciones = []
     if datatemp.get("fechaUltimaAplicacion") == "":
         excepciones.append("Campo Fecha Ultima Aplicación es obligatorio")
-    if datatemp.get("productocontrol") == "":
+    if datatemp.get("productocontrolid") == "":
         excepciones.append("Campo Producto control es obligatorio")
     if excepciones.count > 0:
             raise Exception(", ".join(excepciones))
     controlFertilizantesparacrear = ControlHongo(
         controlfertilizantesid = datatemp.get("controlfertilizantesid"),
         fechaUltimaAplicacion = datatemp.get("fechaUltimaAplicacion"),
-        productocontrol = ProductoControl.objects.get(productocontrol=datatemp.get("productocontrol"))
+        productocontrol = ProductoControl.objects.get(productocontrol=datatemp.get("productocontrolid"))
     )
     controlFertilizantesparacrear.save()
+    return True
+
+
+def crearProductoControl(datatemp):
+    excepciones = []
+    if datatemp.get("registroICA") == "":
+        excepciones.append("Campo registroICA es obligatorio")
+    if datatemp.get("nombreproducto") == "":
+        excepciones.append("Campo Nombre Producto es obligatorio")
+    if datatemp.get("frecuenciaDias") == "":
+        excepciones.append("Campo Frecuencia Dias es obligatorio")
+    if datatemp.get("valor") == "":
+        excepciones.append("Campo valor es obligatorio")
+    if datatemp.get("labor") == "":
+        excepciones.append("Campo labor es obligatorio")
+    if excepciones.count > 0:
+            raise Exception(", ".join(excepciones))
+    ProductoControparacrear = ProductoControl(
+        productocontrolid = datatemp.get("productocontrolid"),
+        registroICA = datatemp.get("registroICA"),
+        nombreproducto = datatemp.get("nombreproducto"),
+        frecuenciaDias = datatemp.get("frecuenciaDias"),
+        valor = datatemp.get("valor"),
+        labor = datatemp.get("labor"),
+    )
+    ProductoControparacrear.save()
     return True
