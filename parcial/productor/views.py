@@ -1,7 +1,7 @@
 import json
 from django.http import JsonResponse
 from django.shortcuts import render,HttpResponse
-from productor.models import Productor,Finca,Vivero,Tipocultivo,Labor
+from productor.models import Productor,Finca,Vivero,Tipocultivo,Labor, ProductoControl, ControlHongo, ControlPlaga, ControlFertilizantes
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
@@ -133,4 +133,56 @@ def crearLabor(datatemp):
         viveroid = Vivero.objects.get(viveroid=datatemp.get("viveroid"))
     )
     laborparacrear.save()
+    return True
+
+def crearControlHongo(datatemp):
+    excepciones = []
+    if datatemp.get("diasPeriodoCarencia") == "":
+        excepciones.append("Campo Dias Periodo Carencia es obligatorio")
+    if datatemp.get("nombre") == "":
+        excepciones.append("Campo Nombre es obligatorio")
+    if datatemp.get("productocontrol") == "":
+        excepciones.append("Campo Producto control es obligatorio")
+    if excepciones.count > 0:
+            raise Exception(", ".join(excepciones))
+    controlHongoparacrear = ControlHongo(
+        controlhongoid = datatemp.get("controlhongoid"),
+        diasPeriodoCarencia = datatemp.get("diasPeriodoCarencia"),
+        nombre = datatemp.get("nombre"),
+        productocontrol = ProductoControl.objects.get(productocontrol=datatemp.get("productocontrol"))
+    )
+    controlHongoparacrear.save()
+    return True
+
+
+def crearControlPlaga(datatemp):
+    excepciones = []
+    if datatemp.get("diasPeriodoCarencia") == "":
+        excepciones.append("Campo Dias Periodo Carencia es obligatorio")
+    if datatemp.get("productocontrol") == "":
+        excepciones.append("Campo Producto control es obligatorio")
+    if excepciones.count > 0:
+            raise Exception(", ".join(excepciones))
+    controlPlagaparacrear = ControlHongo(
+        controlplagaid = datatemp.get("controlhongoid"),
+        diasPeriodoCarencia = datatemp.get("diasPeriodoCarencia"),
+        productocontrol = ProductoControl.objects.get(productocontrol=datatemp.get("productocontrol"))
+    )
+    controlPlagaparacrear.save()
+    return True
+
+def crearControlFertilizantes(datatemp):
+    excepciones = []
+    if datatemp.get("fechaUltimaAplicacion") == "":
+        excepciones.append("Campo Fecha Ultima Aplicación es obligatorio")
+    if datatemp.get("productocontrol") == "":
+        excepciones.append("Campo Producto control es obligatorio")
+    if excepciones.count > 0:
+            raise Exception(", ".join(excepciones))
+    controlFertilizantesparacrear = ControlHongo(
+        controlfertilizantesid = datatemp.get("controlfertilizantesid"),
+        fechaUltimaAplicacion = datatemp.get("fechaUltimaAplicacion"),
+        productocontrol = ProductoControl.objects.get(productocontrol=datatemp.get("productocontrol"))
+    )
+    controlFertilizantesparacrear.save()
     return True
